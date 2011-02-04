@@ -1,5 +1,9 @@
 
 moving = 0;
+Ocell = 0;
+Opiece_x = 0;
+Opiece_y = 0;
+Opiece_i = 0;
 
 $(document).ready(function() {
 	$(".cell").hover(
@@ -11,46 +15,24 @@ $(document).ready(function() {
 		}
 	);
 	
-	$(".cell").click(
+	$(".cell").hover(
+		function() {
+			$(this).css("background-color", "yellow");
+		},
+		function() {
+			$(this).css("background-color", "");
+		}
+	);
+	
+	$("#tooltip").click(
 		function() {
 			x = $(this).attr("x");
 			y = $(this).attr("y");
 			
 			debugtext = x+", "+y+" clicked!"
 			
-			activecell(this);
-			
-			/*numpieces = $(this).children('.piece').size();
-			
-			debugtext += " "+numpieces+" pieces in the cell.";
-			
-			if(moving != 0) {
-				$(this).append('<p class="piece">'+moving+'</p>');
-				$(this).addClass('haspieces');
-				moving = 0;
-			}else if(numpieces > 0) {
-				$('#tooltip').html('<table>');
-				$(this).children('.piece').each(function(i, piece) {
-					piecename = $(piece).text();
-					$('#tooltip').append('<tr><td>'+piecename+'</td></tr>');
-				});
-				$('#tooltip').append('</table>');
-				topleft = $(this).offset();
-				bottom = topleft.top + $(this).height();
-				right = topleft.left + $(this).width();
-				$('#tooltip').offset({ top: bottom, left: right });
-				$('#tooltip').show();
-				
-				moving = $(this).children('.piece').first().html();
-				debugtext += " Carrying "+moving;
-				$(this).children('.piece').first().remove();
-				if($(this).children('.piece').size() == 0) {
-					$(this).removeClass('haspieces');
-				}
-			}*/
-			
 			$("#debug").text(debugtext);
-			
+			activecell(this);
 			
 		}
 	)
@@ -62,31 +44,82 @@ $(document).ready(function() {
 
 function activecell(cell) {
 	numpieces = $(cell).children('.piece').size();
-	if(numpieces > 0) {
+	x = $(cell).attr('x');
+	y = $(cell).attr('y');
+	
+	if(numpieces > 0 || moving != 0) {
 		$('#tooltip').html('<table>');
+		if(moving != 0) {
+			$('#tooltip').append('<tr><td onclick="droppiece(\''+x+'\', \''+y+'\')">Move '+moving+' here<td></tr>');
+		}
 		$(cell).children('.piece').each(function(i, piece) {
 			piecename = $(piece).text();
-			x = $(cell).attr('x');
-			y = $(cell).attr('y');
 			$('#tooltip').append('<tr><td onclick="getpiece(\''+x+'\', \''+y+'\', \''+i+'\')">'+piecename+'</td></tr>');
 		});
+		$('#tooltip').append('<tr><td onclick="hideTooltip()">Cancel</td></tr>');
 		$('#tooltip').append('</table>');
 		topleft = $(cell).offset();
 		bottom = topleft.top + $(cell).height();
 		right = topleft.left + $(cell).width();
 		$('#tooltip').offset({ top: bottom, left: right });
 		$('#tooltip').show();
+	} else {
+		hideTooltip();
+	}
+	
+	if(moving != 0) {
+		$('#debug').append(" Carrying piece: "+moving);
 	}
 }
 
 function getpiece(cellx, celly, index) {
-	debugtext = 'Getting piece from '+x+', '+y+' index '+index+'!'
+	debugtext = 'Getting piece from '+cellx+', '+celly+' index '+index+'!';
 	cell = $('[x="'+cellx+'"][y="'+celly+'"]');
-	debugtext += "Name: "+$(cell).children('.piece').eq(index).text();
+	piecename = $(cell).children('.piece').eq(index).text();
+	debugtext += "Name: "+piecename;
+	
+	Ocell = cell;
+	Opiece_x = cellx;
+	Opiece_y = celly;
+	Opiece_i = index;
+	
+	moving = piecename;
 	
 	$('#debug').text(debugtext);
+	hideTooltip();
 }
 
-function droppiece() {
+function droppiece(cellx, celly) {
+	Ox = $(Ocell).attr('x');
+	Oy = $(Ocell).attr('y');
+	Oi = Opiece_i;
+	Oc = Ocell;
+	piecename = moving;
 	
+	$('#debug').text('Dropping piece from '+Ox+', '+Oy+', '+Oi+' into '+cellx+', '+celly);
+	
+	cell = $('[x="'+cellx+'"][y="'+celly+'"]');
+	
+	// add piece to new cell
+	$(cell).append('<p class="piece">'+piecename+'</p>');
+	$(cell).addClass('haspieces');
+	
+	//remove piece from old cell
+	$(Oc).children('.piece').eq(Oi).remove();
+	if($(Oc).children('.piece').size() == 0) {
+		$(Oc).removeClass('haspieces');
+	}
+	
+	hideTooltip();
+	
+	// clean up global variables
+	moving = 0;
+	Ocell = 0;
+	Opiece_x = 0;
+	Opiece_y = 0;
+	Opiece_i = 0;
+}
+
+function hideTooltip() {
+	$('#tooltip').hide();
 }
