@@ -15,7 +15,7 @@ $(document).ready(function() {
 		}
 	);
 	
-	$(".cell").hover(
+	$("#tooltip" > "tr").hover(
 		function() {
 			$(this).css("background-color", "yellow");
 		},
@@ -24,7 +24,7 @@ $(document).ready(function() {
 		}
 	);
 	
-	$("#tooltip").click(
+	$(".cell").click(
 		function() {
 			x = $(this).attr("x");
 			y = $(this).attr("y");
@@ -122,4 +122,8 @@ function droppiece(cellx, celly) {
 
 function hideTooltip() {
 	$('#tooltip').hide();
+}
+
+function highlightRange(x, y, r) {
+	
 }
