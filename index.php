@@ -38,5 +38,7 @@
 				}
 			?>
 		</div>
+		
+		<div id="tooltip"></div>
   </body>
 </html>

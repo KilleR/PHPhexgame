@@ -18,7 +18,9 @@ $(document).ready(function() {
 			
 			debugtext = x+", "+y+" clicked!"
 			
-			numpieces = $(this).children('.piece').size();
+			activecell(this);
+			
+			/*numpieces = $(this).children('.piece').size();
 			
 			debugtext += " "+numpieces+" pieces in the cell.";
 			
@@ -27,9 +29,25 @@ $(document).ready(function() {
 				$(this).addClass('haspieces');
 				moving = 0;
 			}else if(numpieces > 0) {
+				$('#tooltip').html('<table>');
+				$(this).children('.piece').each(function(i, piece) {
+					piecename = $(piece).text();
+					$('#tooltip').append('<tr><td>'+piecename+'</td></tr>');
+				});
+				$('#tooltip').append('</table>');
+				topleft = $(this).offset();
+				bottom = topleft.top + $(this).height();
+				right = topleft.left + $(this).width();
+				$('#tooltip').offset({ top: bottom, left: right });
+				$('#tooltip').show();
+				
 				moving = $(this).children('.piece').first().html();
 				debugtext += " Carrying "+moving;
-			}
+				$(this).children('.piece').first().remove();
+				if($(this).children('.piece').size() == 0) {
+					$(this).removeClass('haspieces');
+				}
+			}*/
 			
 			$("#debug").text(debugtext);
 			
@@ -42,6 +60,33 @@ $(document).ready(function() {
 	$('[x="5"][y="5"]').addClass("haspieces");
 });
 
-function movepiece() {
+function activecell(cell) {
+	numpieces = $(cell).children('.piece').size();
+	if(numpieces > 0) {
+		$('#tooltip').html('<table>');
+		$(cell).children('.piece').each(function(i, piece) {
+			piecename = $(piece).text();
+			x = $(cell).attr('x');
+			y = $(cell).attr('y');
+			$('#tooltip').append('<tr><td onclick="getpiece(\''+x+'\', \''+y+'\', \''+i+'\')">'+piecename+'</td></tr>');
+		});
+		$('#tooltip').append('</table>');
+		topleft = $(cell).offset();
+		bottom = topleft.top + $(cell).height();
+		right = topleft.left + $(cell).width();
+		$('#tooltip').offset({ top: bottom, left: right });
+		$('#tooltip').show();
+	}
+}
 
+function getpiece(cellx, celly, index) {
+	debugtext = 'Getting piece from '+x+', '+y+' index '+index+'!'
+	cell = $('[x="'+cellx+'"][y="'+celly+'"]');
+	debugtext += "Name: "+$(cell).children('.piece').eq(index).text();
+	
+	$('#debug').text(debugtext);
+}
+
+function droppiece() {
+	
 }
