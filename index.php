@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html>
 	<head>
     <title>Template Hex Grid</title>
-		<link href="base.css" rel="stylesheet" type="text/css">
-		<script src="jquery.js" language="JavaScript" type="text/javascript"></script>
-		<script src="hexgame.js" language="JavaScript" type="text/javascript"></script>
+		<link href="base.css" rel="stylesheet" type="text/css" >
+		<script src="jquery.js" type="text/javascript"></script>
+		<script src="hexgame.js" type="text/javascript"></script>
 		<?php
 			$GRID_WIDTH = 20;
 			$GRID_HEIGHT = 20;
@@ -33,7 +33,7 @@
 						
 						$thisx = $x - $offset;
 						
-						echo("<div class='cell' x='$thisx' y='$y' style='height: $CELLSIZE; width: $CELLSIZE; top: $celloffset_y; left: $celloffset_x'><p>$thisx, $y</p></div>\r\n					");
+						echo("<div class='cell' style='height: ".$CELLSIZE."px; width: ".$CELLSIZE."px; top: ".$celloffset_y."px; left: ".$celloffset_x."px;' x='$thisx' y='$y'><p>$thisx, $y</p></div>\r\n					");
 					}
 				}
 			?>

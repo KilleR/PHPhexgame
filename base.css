@@ -6,7 +6,7 @@ body {
 }
 
 .cell {
-	font-size: 8;
+	font-size: xx-small;
 	position: absolute;
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
@@ -25,4 +25,5 @@ body {
 	position: absolute;
 	background-color: white;
 	display: none;
+  cursor: pointer;
 }
