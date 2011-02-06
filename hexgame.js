@@ -1,4 +1,4 @@
-
+ 
 moving = 0;
 Ocell = 0;
 Opiece_x = 0;
